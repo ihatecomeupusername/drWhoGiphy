@@ -4,13 +4,15 @@
 <head>
     <meta charset="utf-8">
     <title>doctor Buttons</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 </head>
 
 <body>
 
 
 
-<div id="display">
+<div class="container" id="display">
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript">
@@ -19,10 +21,13 @@
     {
         var newB = $("<button>");
         newB.attr("data-doctor", topics[i][0]);
+        newB.css("margin", "10px");
         newB.text(topics[i][1]);
-        $("body").append(newB);
+        newB.addClass("btn btn-primary");
+        $("body").prepend(newB);
     }
     $("button").on("click", function() {
+        $("#display").empty();
         var doctor = $(this).attr("data-doctor");
 
         var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
@@ -30,7 +35,7 @@
 
         if (doctor === "silence")
         {
-            $("body").css("background-color", "black");
+            $("body").css("background-image","url('backDark.jpg')");
             $("button").hide();
             var doctorDiv = $("<div>");
             var doctorImage = $("<img>");
@@ -42,6 +47,7 @@
         }
         else
         {
+            $("body").css("background-image","url('background.jpg')");
             $.ajax({
                 url: queryURL,
                 method: "GET"
@@ -54,12 +60,14 @@
 
                     for (var i = 0; i < results.length; i++) {
                         var doctorDiv = $("<div>");
+                        doctorDiv.addClass("container");
                         var p = $("<p>").text("Rating: " + results[i].rating);
                         var doctorImage = $("<img>");
                         doctorImage.attr("src", results[i].images.fixed_height.url);
 
                         doctorDiv.append(p);
                         doctorDiv.append(doctorImage);
+                        doctorDiv.css("float","left");
 
                         $("#display").prepend(doctorDiv);
                     }
