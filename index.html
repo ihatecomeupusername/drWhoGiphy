@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>doctor Buttons</title>
+</head>
+
+<body>
+
+
+
+<div id="display">
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+    var topics = [["9th+doctor","Fantastic"],["10th+doctor","Allons-y"],["11th+doctor","Geronimo"],["peter+capaldi","Shut up"],["exterminate","exterminate"],["silence","????"]];
+    for (var i = 0; i < topics.length; i++)
+    {
+        var newB = $("<button>");
+        newB.attr("data-doctor", topics[i][0]);
+        newB.text(topics[i][1]);
+        $("body").append(newB);
+    }
+    $("button").on("click", function() {
+        var doctor = $(this).attr("data-doctor");
+
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+            doctor  + "&api_key=2r2pDhZcQrSNw7ZAYh1X6KWrUi6JpWVE&limit=10";
+
+        if (doctor === "silence")
+        {
+            $("body").css("background-color", "black");
+            $("button").hide();
+            var doctorDiv = $("<div>");
+            var doctorImage = $("<img>");
+            doctorImage.attr("src", "silence.jpg");
+
+            doctorDiv.append(doctorImage);
+
+            $("#display").prepend(doctorDiv);
+        }
+        else
+        {
+            $.ajax({
+                url: queryURL,
+                method: "GET"
+            })
+                .then(function (response) {
+                    console.log(queryURL);
+
+                    console.log(response);
+                    var results = response.data;
+
+                    for (var i = 0; i < results.length; i++) {
+                        var doctorDiv = $("<div>");
+                        var p = $("<p>").text("Rating: " + results[i].rating);
+                        var doctorImage = $("<img>");
+                        doctorImage.attr("src", results[i].images.fixed_height.url);
+
+                        doctorDiv.append(p);
+                        doctorDiv.append(doctorImage);
+
+                        $("#display").prepend(doctorDiv);
+                    }
+                });
+        }
+    });
+
+</script>
+</body>
+
+</html>
